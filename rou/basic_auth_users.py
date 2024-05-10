@@ -64,4 +64,4 @@ async def login(form: OAuth2PasswordRequestForm = Depends()):
 
 @app.get("/user/me")
 async def me(user: User = Depends(current_user)):
-    return user
+    return user 
