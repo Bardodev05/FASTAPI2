@@ -1,3 +1,3 @@
-from pymongo import mongo_client
+from pymongo import MongoClient
 
-db_client = mongo_client()
+db_client = MongoClient().local
