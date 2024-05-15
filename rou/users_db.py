@@ -64,13 +64,14 @@ async def user(id: str):
     if not found:
         return {"error": "No se ha eliminado el usuario"}
 
-# Helper
+
 
 
 def search_user(field: str, key):
-
-    try:
-        user = db_client.users.find_one({field: key})
-        return User(**user_schema(user))
-    except:
+    user = db_client.users.find_one({field: key})
+    if user:
+        # Devuelve el usuario en formato JSON
+        return user_schema(user)
+    else:
+        # Devuelve un mensaje de error si el usuario no se encuentra
         return {"error": "No se ha encontrado el usuario"}
