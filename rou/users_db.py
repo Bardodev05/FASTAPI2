@@ -28,17 +28,17 @@ async def user(id: str):
 
 @router.post("/", response_model=User, status_code=status.HTTP_201_CREATED)
 async def create_user(user: User):
- 
     existing_user = search_user("email", user.email)
     if existing_user:
-        raise HTTPException(status_code=400, detail="El usuario ya existe")
-    
-  
-    result = db_client.users.insert_one(user.dict(exclude_unset=True))
-    if result.acknowledged:
-        return user_schema(result.inserted_id)
+        # Devuelve el usuario existente en lugar de lanzar una excepción
+        return existing_user
     else:
-        raise HTTPException(status_code=500, detail="Error al crear el usuario")
+        result = db_client.users.insert_one(user.dict(exclude_unset=True))
+        if result.acknowledged:
+            return user_schema(result.inserted_id)
+        else:
+            raise HTTPException(status_code=500, detail="Error al crear el usuario")
+
 
 
 @router.put("/", response_model=User)
